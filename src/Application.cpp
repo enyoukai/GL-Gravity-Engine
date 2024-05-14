@@ -16,8 +16,11 @@ void Application::Run()
 {
 	Load();
 
+	Start();
+
 	while (!glfwWindowShouldClose(window))
 	{
+		Update();
 		Render();
 	}
 
@@ -47,16 +50,29 @@ void Application::Load()
 		return;
 	}
 
+	previousTime = glfwGetTime();
+
 	spdlog::info("Finished loading application");
+}
+
+void Application::Start()
+{
+	CelestialBody sun = CelestialBodyFactory::CreateSun();
+	CelestialBody earth = CelestialBodyFactory::CreateEarth({100, 0, 100}, {0, 0, 0});
+
+	engine.AddBody(sun);
+	engine.AddBody(earth);
 }
 
 void Application::Update()
 {
+	double dt = glfwGetTime() - previousTime;
+
+	engine.Simulate(dt);
 }
 
 void Application::Render()
 {
-
 	// input
 	// -----
 	processInput(window);

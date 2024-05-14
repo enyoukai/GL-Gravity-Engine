@@ -15,18 +15,32 @@ typedef struct CelestialBody
 
 class CelestialEngine
 {
+private:
 	std::vector<CelestialBody> bodies;
 
+public:
 	void Simulate(float dt);
 	void AddBody(CelestialBody body);
 };
 
-class CelestialBodyFactory
+namespace CelestialBodyFactory
 {
-	static CelestialBody CreateBody(float mass, float radius, float x, float y, float z, float vx, float vy, float vz);
+	const double sunMass = 1.989e30;
+	const double sunRadius = 6.9634e8;
 
-	static CelestialBody CreateSun();
-	static CelestialBody CreateEarth();
-	static CelestialBody CreateMoon();
-	static CelestialBody CreateBlackHole();
+	const double earthMass = 5.972e24;
+	const double earthRadius = 6.371e6;
+
+	const double moonMass = 7.342e22;
+	const double moonRadius = 1.737e6;
+
+	const double blackHoleMass = 1e31;
+	const double blackHoleRadius = 1e5;
+
+	CelestialBody CreateBody(float mass, float radius, Vec3 position, Vec3 velocity);
+	CelestialBody CreateSun();
+	CelestialBody CreateEarth();
+
+	CelestialBody CreateSun(Vec3 position, Vec3 velocity);
+	CelestialBody CreateEarth(Vec3 position, Vec3 velocity);
 };
