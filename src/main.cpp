@@ -1,21 +1,14 @@
 #include "Application.h"
 
 #include <iostream>
+#include <iostream>
 
 // settings
 
 int main()
 {
 	Application application("Enyoukai's Gravity Engine");
+	application.Run();
 
-	while (!glfwWindowShouldClose(application.window))
-	{
-		application.render();
-	}
-
-	glfwTerminate();
 	return 0;
 }
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------

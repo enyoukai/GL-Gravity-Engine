@@ -8,6 +8,8 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(lib/glfw)
 
+add_subdirectory(lib/spdlog)
+
 add_library(glad lib/glad/src/glad.c)
 target_include_directories(glad PUBLIC lib/glad/include)
 
@@ -19,6 +21,7 @@ target_include_directories(GL_GRAVITATION PRIVATE include)
 
 target_link_libraries(GL_GRAVITATION glad)
 target_link_libraries(GL_GRAVITATION glfw)
+target_link_libraries(GL_GRAVITATION spdlog)
 
 find_package( OpenGL REQUIRED )
 target_link_libraries(GL_GRAVITATION OpenGL::GL)
