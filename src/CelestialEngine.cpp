@@ -27,7 +27,7 @@ void CelestialEngine::Simulate(float dt)
 	for (CelestialBody body : bodies)
 	{
 		body.position += body.velocity * dt;
-		spdlog::info("Position: ({}, {}, {})", body.position.x, body.position.y, body.position.z);
+		spdlog::debug("Position: ({}, {}, {})", body.position.x, body.position.y, body.position.z);
 	}
 }
 

@@ -9,7 +9,8 @@
 
 Application::Application(std::string applicationName)
 {
-	applicationName = applicationName;
+	spdlog::info("Creating application {}", applicationName);
+	this->applicationName = applicationName;
 }
 
 void Application::Run()
@@ -29,6 +30,8 @@ void Application::Run()
 
 void Application::Load()
 {
+	spdlog::info("Loading application {}", applicationName);
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -58,7 +61,7 @@ void Application::Load()
 void Application::Start()
 {
 	CelestialBody sun = CelestialBodyFactory::CreateSun();
-	CelestialBody earth = CelestialBodyFactory::CreateEarth({100, 0, 100}, {0, 0, 0});
+	CelestialBody earth = CelestialBodyFactory::CreateEarth({100, 0, 100}, {10, 0, 10});
 
 	engine.AddBody(sun);
 	engine.AddBody(earth);

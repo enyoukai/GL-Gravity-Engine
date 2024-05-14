@@ -25,11 +25,11 @@ public:
 
 namespace CelestialBodyFactory
 {
-	const double sunMass = 1.989e30;
-	const double sunRadius = 6.9634e8;
+	const double sunMass = 1000;
+	const double sunRadius = 10;
 
-	const double earthMass = 5.972e24;
-	const double earthRadius = 6.371e6;
+	const double earthMass = 10;
+	const double earthRadius = 1;
 
 	const double moonMass = 7.342e22;
 	const double moonRadius = 1.737e6;
