@@ -29,4 +29,7 @@ private:
 
 	const unsigned int scrWidth = 1920;
 	const unsigned int scrHeight = 1080;
+
+	unsigned int VAO;
+	unsigned int VBO;
 };

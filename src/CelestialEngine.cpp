@@ -24,10 +24,10 @@ void CelestialEngine::Simulate(float dt)
 		}
 	}
 
-	for (CelestialBody body : bodies)
+	for (CelestialBody &body : bodies)
 	{
 		body.position += body.velocity * dt;
-		spdlog::debug("Position: ({}, {}, {})", body.position.x, body.position.y, body.position.z);
+		spdlog::info("Sumaliotn Position: ({}, {}, {})", body.position.x, body.position.y, body.position.z);
 	}
 }
 

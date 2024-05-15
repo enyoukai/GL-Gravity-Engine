@@ -1,9 +1,8 @@
 #include "Application.h"
 
+#include <filesystem>
+#include <string>
 #include <iostream>
-#include <iostream>
-
-// settings
 
 int main()
 {

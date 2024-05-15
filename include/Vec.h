@@ -38,4 +38,13 @@ public:
 
 		return *this;
 	}
+
+	Vec3 &operator-=(Vec3 a)
+	{
+		x -= a.x;
+		y -= a.y;
+		z -= a.z;
+
+		return *this;
+	}
 };
