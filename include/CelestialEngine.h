@@ -6,8 +6,8 @@
 
 typedef struct CelestialBody
 {
-	float mass;
-	float radius;
+	double mass;
+	double radius;
 
 	Vec3 position;
 	Vec3 velocity;
@@ -37,7 +37,7 @@ namespace CelestialBodyFactory
 	const double blackHoleMass = 1e31;
 	const double blackHoleRadius = 1e5;
 
-	CelestialBody CreateBody(float mass, float radius, Vec3 position, Vec3 velocity);
+	CelestialBody CreateBody(double mass, double radius, Vec3 position, Vec3 velocity);
 	CelestialBody CreateSun();
 	CelestialBody CreateEarth();
 

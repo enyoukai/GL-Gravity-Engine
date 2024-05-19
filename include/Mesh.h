@@ -6,17 +6,17 @@ class Mesh
 {
 	unsigned int VAO;
 	unsigned int VBO;
-	unsigned int EBO;
 
 	unsigned int vertexCount;
-	unsigned int indexCount;
 
 public:
+	void Init();
 	void SetVertices(std::vector<double> &vertices);
 	void Draw();
 };
 
 namespace MeshFactory
 {
-	Mesh CreateSphere(float radius, int resolution);
+	Mesh CreateSphere(double radius, int resolution);
+	Mesh CreateCube(double sideLength);
 }

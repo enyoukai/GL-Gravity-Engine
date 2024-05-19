@@ -3,6 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <string>
 
 #include "Application.h"
@@ -53,6 +57,9 @@ void Application::Load()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return;
 	}
+
+	glEnable(GL_DEPTH_TEST);
+
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback([](GLenum source,
 							  GLenum type,
@@ -75,10 +82,16 @@ void Application::Load()
 
 void Application::Start()
 {
-	Shader shader("PlanetShader", "C:\\Users\\enyoukai\\code\\gl-gravitation\\src\\shaders\\planetShader.vert", "C:\\Users\\enyoukai\\code\\gl-gravitation\\src\\shaders\\planetShader.frag");
+	Shader planetShader("PlanetShader", "C:\\Users\\enyoukai\\code\\gl-gravitation\\src\\shaders\\planetShader.vert", "C:\\Users\\enyoukai\\code\\gl-gravitation\\src\\shaders\\planetShader.frag");
 
-	shader.CompileProgram();
-	shader.Use();
+	planetShader.CompileProgram();
+	planetShader.Use();
+
+	// move objects back so they are visible
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+	planetShader.SetMat4("view", view);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)scrWidth / (float)scrHeight, 0.1f, 100.0f);
+	planetShader.SetMat4("projection", projection);
 
 	CelestialBody sun = CelestialBodyFactory::CreateSun();
 	CelestialBody earth = CelestialBodyFactory::CreateEarth({1.5e11, 0, 0}, {0, 29784});
@@ -86,15 +99,8 @@ void Application::Start()
 	engine.AddBody(sun);
 	engine.AddBody(earth);
 
-	glGenVertexArrays(1, &VAO);
-
-	glBindVertexArray(VAO);
-
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-	glEnableVertexAttribArray(0);
+	earthMesh.Init();
+	cubeMesh = MeshFactory::CreateCube(0.1);
 }
 
 void Application::Update()
@@ -110,12 +116,12 @@ void Application::Render()
 	processInput(window);
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	CelestialBody earth = engine.bodies[1];
 
-	float SCALE = 500000000000.95966;
-	float vertices[9];
+	double SCALE = 500000000000.95966;
+	std::vector<double> vertices(9);
 	vertices[0] = earth.position.x / SCALE;
 	vertices[1] = earth.position.y / SCALE;
 	vertices[2] = 0;
@@ -128,11 +134,12 @@ void Application::Render()
 	vertices[7] = earth.position.y / SCALE + 0.01;
 	vertices[8] = 0;
 
-	spdlog::info("Position: ({}, {}, {})", earth.position.x, earth.position.y, earth.position.z);
+	earthMesh.SetVertices(vertices);
+	earthMesh.Draw();
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	spdlog::debug("Position: ({}, {}, {})", earth.position.x, earth.position.y, earth.position.z);
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	cubeMesh.Draw();
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();

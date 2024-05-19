@@ -7,11 +7,14 @@
 
 #include <glad/glad.h>
 
-void Mesh::SetVertices(std::vector<double> &vertices)
+void Mesh::Init()
 {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+}
 
+void Mesh::SetVertices(std::vector<double> &vertices)
+{
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -20,6 +23,9 @@ void Mesh::SetVertices(std::vector<double> &vertices)
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(double), vertices.data(), GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void *)0);
+
+	vertexCount = vertices.size() / 3;
+
 	glEnableVertexAttribArray(0);
 
 	glBindVertexArray(0);
@@ -34,10 +40,12 @@ void Mesh::Draw()
 
 namespace MeshFactory
 {
-	Mesh CreateSphere(float radius, int resolution)
+	Mesh CreateSphere(double radius, int resolution)
 	{
 		Mesh sphereMesh;
-		std::vector<double> vertices;
+		sphereMesh.Init();
+
+		std::vector<double> sphereVertices;
 
 		for (int i = 0; i <= resolution; i++)
 		{
@@ -55,14 +63,62 @@ namespace MeshFactory
 				double y = cosTheta;
 				double z = sinPhi * sinTheta;
 
-				vertices.push_back(radius * x);
-				vertices.push_back(radius * y);
-				vertices.push_back(radius * z);
+				sphereVertices.push_back(radius * x);
+				sphereVertices.push_back(radius * y);
+				sphereVertices.push_back(radius * z);
 			}
 		}
 
-		sphereMesh.SetVertices(vertices);
+		sphereMesh.SetVertices(sphereVertices);
 
 		return sphereMesh;
+	}
+
+	Mesh CreateCube(double sideLength)
+	{
+		Mesh cubeMesh;
+
+		cubeMesh.Init();
+		std::vector<double> cubeVertices = {
+			// Front face
+			-0.5, -0.5, 0.5, // Bottom-left
+			0.5, -0.5, 0.5,	 // Bottom-right
+			0.5, 0.5, 0.5,	 // Top-right
+			-0.5, 0.5, 0.5,	 // Top-left
+			// Back face
+			-0.5, -0.5, -0.5, // Bottom-left
+			0.5, -0.5, -0.5,  // Bottom-right
+			0.5, 0.5, -0.5,	  // Top-right
+			-0.5, 0.5, -0.5,  // Top-left
+			// Left face
+			-0.5, -0.5, -0.5, // Bottom-front
+			-0.5, -0.5, 0.5,  // Bottom-back
+			-0.5, 0.5, 0.5,	  // Top-back
+			-0.5, 0.5, -0.5,  // Top-front
+			// Right face
+			0.5, -0.5, -0.5, // Bottom-front
+			0.5, -0.5, 0.5,	 // Bottom-back
+			0.5, 0.5, 0.5,	 // Top-back
+			0.5, 0.5, -0.5,	 // Top-front
+			// Top face
+			-0.5, 0.5, 0.5,	 // Front-left
+			0.5, 0.5, 0.5,	 // Front-right
+			0.5, 0.5, -0.5,	 // Back-right
+			-0.5, 0.5, -0.5, // Back-left
+			// Bottom face
+			-0.5, -0.5, 0.5, // Front-left
+			0.5, -0.5, 0.5,	 // Front-right
+			0.5, -0.5, -0.5, // Back-right
+			-0.5, -0.5, -0.5 // Back-left
+		};
+
+		for (int i = 0; i < cubeVertices.size(); i++)
+		{
+			cubeVertices[i] *= sideLength;
+		}
+
+		cubeMesh.SetVertices(cubeVertices);
+
+		return cubeMesh;
 	}
 }

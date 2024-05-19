@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "CelestialEngine.h"
+#include "Mesh.h"
 
 class Application
 {
@@ -30,6 +31,7 @@ private:
 	const unsigned int scrWidth = 1920;
 	const unsigned int scrHeight = 1080;
 
-	unsigned int VAO;
-	unsigned int VBO;
+	Mesh earthMesh;
+	Mesh cubeMesh;
+
 };

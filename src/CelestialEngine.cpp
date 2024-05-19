@@ -27,7 +27,6 @@ void CelestialEngine::Simulate(float dt)
 	for (CelestialBody &body : bodies)
 	{
 		body.position += body.velocity * dt;
-		spdlog::info("Sumaliotn Position: ({}, {}, {})", body.position.x, body.position.y, body.position.z);
 	}
 }
 
@@ -38,7 +37,7 @@ void CelestialEngine::AddBody(CelestialBody body)
 
 namespace CelestialBodyFactory
 {
-	CelestialBody CreateBody(float mass, float radius, Vec3 position, Vec3 velocity)
+	CelestialBody CreateBody(double mass, double radius, Vec3 position, Vec3 velocity)
 	{
 		return {mass, radius, position, velocity};
 	}
