@@ -5,6 +5,8 @@
 
 #include "CelestialEngine.h"
 #include "Mesh.h"
+#include "Camera.h"
+#include "Shader.h"
 
 class Application
 {
@@ -24,6 +26,7 @@ private:
 	CelestialEngine engine;
 
 	double previousTime = 0.0;
+	double dt = 0;
 
 	void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 	void processInput(GLFWwindow *window);
@@ -34,4 +37,7 @@ private:
 	Mesh earthMesh;
 	Mesh cubeMesh;
 
+	Camera camera;
+
+	Shader planetShader;
 };

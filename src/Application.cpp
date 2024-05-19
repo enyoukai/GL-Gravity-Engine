@@ -61,6 +61,7 @@ void Application::Load()
 	glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glDebugMessageCallback([](GLenum source,
 							  GLenum type,
 							  GLuint,
@@ -82,16 +83,9 @@ void Application::Load()
 
 void Application::Start()
 {
-	Shader planetShader("PlanetShader", "C:\\Users\\enyoukai\\code\\gl-gravitation\\src\\shaders\\planetShader.vert", "C:\\Users\\enyoukai\\code\\gl-gravitation\\src\\shaders\\planetShader.frag");
+	planetShader.Init("PlanetShader", "C:\\Users\\enyoukai\\code\\gl-gravitation\\src\\shaders\\planetShader.vert", "C:\\Users\\enyoukai\\code\\gl-gravitation\\src\\shaders\\planetShader.frag");
 
-	planetShader.CompileProgram();
 	planetShader.Use();
-
-	// move objects back so they are visible
-	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
-	planetShader.SetMat4("view", view);
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)scrWidth / (float)scrHeight, 0.1f, 100.0f);
-	planetShader.SetMat4("projection", projection);
 
 	CelestialBody sun = CelestialBodyFactory::CreateSun();
 	CelestialBody earth = CelestialBodyFactory::CreateEarth({1.5e11, 0, 0}, {0, 29784});
@@ -105,15 +99,22 @@ void Application::Start()
 
 void Application::Update()
 {
-	double dt = glfwGetTime() - previousTime;
+	dt = glfwGetTime() - previousTime;
 	previousTime = glfwGetTime();
+
+	processInput(window);
+
+	glm::mat4 viewMatrix = camera.GetViewMatrix();
+	glm::mat4 projectionMatrix = camera.GetProjectionMatrix();
+
+	planetShader.SetMat4("view", viewMatrix);
+	planetShader.SetMat4("projection", projectionMatrix);
 
 	engine.Simulate(dt * 3.154e7);
 }
 
 void Application::Render()
 {
-	processInput(window);
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -149,6 +150,14 @@ void Application::processInput(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		camera.ProcessKeyboard(FORWARD, dt);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera.ProcessKeyboard(BACKWARD, dt);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera.ProcessKeyboard(LEFT, dt);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera.ProcessKeyboard(RIGHT, dt);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

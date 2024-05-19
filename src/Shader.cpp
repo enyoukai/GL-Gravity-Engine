@@ -6,13 +6,16 @@
 
 #include "Shader.h"
 
-Shader::Shader(std::string programName, const char *vertexPath, const char *fragmentPath)
+void Shader::Init(std::string programName, const char *vertexPath, const char *fragmentPath)
 {
 	if (!LoadShaderFromPath(vertexPath, fragmentPath))
 	{
 		spdlog::error("Failed to load shader from path");
 		return;
 	}
+
+	this->programName = programName;
+	CompileProgram();
 }
 
 void Shader::CompileProgram()
@@ -24,6 +27,7 @@ void Shader::CompileProgram()
 
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vShaderCStr, NULL);
+#FIXME GL_CALLBACK triggering here
 	glCompileShader(vertexShader);
 
 	if (!CheckShaderCompilation(vertexShader, "VERTEX"))
@@ -41,7 +45,8 @@ void Shader::CompileProgram()
 	glAttachShader(ID, fragmentShader);
 	glLinkProgram(ID);
 
-	CheckProgramCompilation(ID);
+	if (!CheckProgramCompilation(ID))
+		return;
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);

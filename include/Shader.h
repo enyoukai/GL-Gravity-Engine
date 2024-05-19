@@ -6,9 +6,7 @@
 class Shader
 {
 public:
-	Shader(std::string programName, const char *vertexPath, const char *fragmentPath);
-
-	void CompileProgram();
+	void Init(std::string programName, const char *vertexPath, const char *fragmentPath);
 	void Use();
 
 	void SetBool(const std::string &name, bool value) const;
@@ -25,6 +23,7 @@ private:
 
 	std::string programName;
 
+	void CompileProgram();
 	bool LoadShaderFromPath(const char *vertexPath, const char *fragmentPath);
 
 	bool CheckShaderCompilation(unsigned int shader, std::string type);
