@@ -5,7 +5,7 @@
 // #define _USE_MATH_DEFINES
 // #include <cmath>
 
-#include "Math.h"
+#include "MathUtils.h"
 #include "Vec.h"
 
 #include <glad/glad.h>
@@ -64,8 +64,8 @@ namespace MeshFactory
 					double leftTheta = 2 * M_PI * (lon / longitudeCount);
 					double rightTheta = 2 * M_PI * ((lon + 1) / longitudeCount);
 
-					Vec3 v1 = Math::GetSphereVertex(radius, leftTheta, lowerPhi);
-					Vec3 v2 = Math::GetSphereVertex(radius, rightTheta, lowerPhi);
+					Vec3 v1 = MathUtils::GetSphereVertex(radius, leftTheta, lowerPhi);
+					Vec3 v2 = MathUtils::GetSphereVertex(radius, rightTheta, lowerPhi);
 
 					sphereVertices.push_back(radius * cos(lowerPhi) * cos(leftTheta));
 					sphereVertices.push_back(radius * cos(lowerPhi) * sin(leftTheta));

@@ -1,9 +1,6 @@
-#pragma once
+#include "MathUtils.h"
 
-#include <Vec.h>
-#include <corecrt_math_defines.h>
-
-namespace Math
+namespace MathUtils
 {
 	Vec3 GetSphereVertex(double radius, double theta, double phi)
 	{

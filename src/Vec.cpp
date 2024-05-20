@@ -13,3 +13,13 @@ Vec3 Vec3::Normalize()
 
 	return {x / length, y / length, z / length};
 }
+
+namespace VecUtils
+{
+	void AppendVecToVector(std::vector<double> &vector, Vec3 vec)
+	{
+		vector.push_back(vec.x);
+		vector.push_back(vec.y);
+		vector.push_back(vec.z);
+	}
+}
