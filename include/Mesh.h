@@ -17,6 +17,6 @@ public:
 
 namespace MeshFactory
 {
-	Mesh CreateSphere(double radius, int resolution);
+	Mesh CreateSphere(double radius, int latitudeCount, int longitudeCount);
 	Mesh CreateCube(double sideLength);
 }

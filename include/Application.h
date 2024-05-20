@@ -28,8 +28,9 @@ private:
 	double previousTime = 0.0;
 	double dt = 0;
 
-	void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-	void processInput(GLFWwindow *window);
+	void HandleCursorMovement(GLFWwindow *window, double xpos, double ypos);
+	void HandleFramebufferResizing(GLFWwindow *window, int width, int height);
+	void ProcessInput(GLFWwindow *window);
 
 	const unsigned int scrWidth = 1920;
 	const unsigned int scrHeight = 1080;
@@ -42,6 +43,7 @@ private:
 
 	Mesh earthMesh;
 	Mesh cubeMesh;
+	Mesh sphereMesh;
 
 	Camera camera;
 

@@ -40,28 +40,28 @@ void Mesh::Draw()
 
 namespace MeshFactory
 {
-	Mesh CreateSphere(double radius, int resolution)
+	Mesh CreateSphere(double radius, int latitudeCount, int longitudeCount)
 	{
 		Mesh sphereMesh;
 		sphereMesh.Init();
 
 		std::vector<double> sphereVertices;
 
-		for (int i = 0; i <= resolution; i++)
+		for (int lat = 0; lat <= latitudeCount; ++lat)
 		{
-			double theta = i * M_PI / resolution;
-			double sinTheta = sin(theta);
-			double cosTheta = cos(theta);
+			float theta = lat * M_PI / latitudeCount;
+			float sinTheta = sin(theta);
+			float cosTheta = cos(theta);
 
-			for (int j = 0; j <= resolution; j++)
+			for (int lon = 0; lon <= longitudeCount; ++lon)
 			{
-				double phi = j * 2 * M_PI / resolution;
-				double sinPhi = sin(phi);
-				double cosPhi = cos(phi);
+				float phi = lon * 2 * M_PI / longitudeCount;
+				float sinPhi = sin(phi);
+				float cosPhi = cos(phi);
 
-				double x = cosPhi * sinTheta;
-				double y = cosTheta;
-				double z = sinPhi * sinTheta;
+				float x = cosPhi * sinTheta;
+				float y = cosTheta;
+				float z = sinPhi * sinTheta;
 
 				sphereVertices.push_back(radius * x);
 				sphereVertices.push_back(radius * y);
@@ -79,38 +79,49 @@ namespace MeshFactory
 		Mesh cubeMesh;
 
 		cubeMesh.Init();
+
 		std::vector<double> cubeVertices = {
-			// Front face
-			-0.5, -0.5, 0.5, // Bottom-left
-			0.5, -0.5, 0.5,	 // Bottom-right
-			0.5, 0.5, 0.5,	 // Top-right
-			-0.5, 0.5, 0.5,	 // Top-left
-			// Back face
-			-0.5, -0.5, -0.5, // Bottom-left
-			0.5, -0.5, -0.5,  // Bottom-right
-			0.5, 0.5, -0.5,	  // Top-right
-			-0.5, 0.5, -0.5,  // Top-left
-			// Left face
-			-0.5, -0.5, -0.5, // Bottom-front
-			-0.5, -0.5, 0.5,  // Bottom-back
-			-0.5, 0.5, 0.5,	  // Top-back
-			-0.5, 0.5, -0.5,  // Top-front
-			// Right face
-			0.5, -0.5, -0.5, // Bottom-front
-			0.5, -0.5, 0.5,	 // Bottom-back
-			0.5, 0.5, 0.5,	 // Top-back
-			0.5, 0.5, -0.5,	 // Top-front
-			// Top face
-			-0.5, 0.5, 0.5,	 // Front-left
-			0.5, 0.5, 0.5,	 // Front-right
-			0.5, 0.5, -0.5,	 // Back-right
-			-0.5, 0.5, -0.5, // Back-left
-			// Bottom face
-			-0.5, -0.5, 0.5, // Front-left
-			0.5, -0.5, 0.5,	 // Front-right
-			0.5, -0.5, -0.5, // Back-right
-			-0.5, -0.5, -0.5 // Back-left
-		};
+			-0.5, -0.5, -0.5,
+			0.5, -0.5, -0.5,
+			0.5, 0.5, -0.5,
+			0.5, 0.5, -0.5,
+			-0.5, 0.5, -0.5,
+			-0.5, -0.5, -0.5,
+
+			-0.5, -0.5, 0.5,
+			0.5, -0.5, 0.5,
+			0.5, 0.5, 0.5,
+			0.5, 0.5, 0.5,
+			-0.5, 0.5, 0.5,
+			-0.5, -0.5, 0.5,
+
+			-0.5, 0.5, 0.5,
+			-0.5, 0.5, -0.5,
+			-0.5, -0.5, -0.5,
+			-0.5, -0.5, -0.5,
+			-0.5, -0.5, 0.5,
+			-0.5, 0.5, 0.5,
+
+			0.5, 0.5, 0.5,
+			0.5, 0.5, -0.5,
+			0.5, -0.5, -0.5,
+			0.5, -0.5, -0.5,
+			0.5, -0.5, 0.5,
+			0.5, 0.5, 0.5,
+
+			-0.5, -0.5, -0.5,
+			0.5, -0.5, -0.5,
+			0.5, -0.5, 0.5,
+			0.5, -0.5, 0.5,
+			-0.5, -0.5, 0.5,
+			-0.5, -0.5, -0.5,
+
+			-0.5, 0.5, -0.5,
+			0.5, 0.5, -0.5,
+			0.5, 0.5, 0.5,
+			0.5, 0.5, 0.5,
+			-0.5, 0.5, 0.5,
+			-0.5, 0.5, -0.5};
 
 		for (int i = 0; i < cubeVertices.size(); i++)
 		{

@@ -84,22 +84,18 @@ void Application::Load()
 							 {
 		Application *app;
 
+		if (!(app = reinterpret_cast<Application *>(glfwGetWindowUserPointer(window))))
+			return;
+
+		app->HandleCursorMovement(window, xpos, ypos); });
+
+	glfwSetFramebufferSizeCallback(window, [](GLFWwindow *window, int width, int height)
+								   {
+		Application *app;
+
 		if (!(app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window)))) return;
 
-		if (app->firstMouse)
-		{
-			app->lastMouseX = xpos;
-			app->lastMouseY = ypos;
-			app->firstMouse = false;
-		}
-
-		float xoffset = xpos - app->lastMouseX;
-		float yoffset = app->lastMouseY - ypos;
-
-		app->lastMouseX = xpos;
-		app->lastMouseY = ypos;
-
-		app->camera.ProcessMouseMovement(xoffset, yoffset); });
+		app->HandleFramebufferResizing(window, width, height); });
 
 	previousTime = glfwGetTime();
 
@@ -120,6 +116,7 @@ void Application::Start()
 
 	earthMesh.Init();
 	cubeMesh = MeshFactory::CreateCube(0.1);
+	sphereMesh = MeshFactory::CreateSphere(1, 100, 100);
 }
 
 void Application::Update()
@@ -127,7 +124,7 @@ void Application::Update()
 	dt = glfwGetTime() - previousTime;
 	previousTime = glfwGetTime();
 
-	processInput(window);
+	ProcessInput(window);
 
 	glm::mat4 viewMatrix = camera.GetViewMatrix();
 	glm::mat4 projectionMatrix = camera.GetProjectionMatrix();
@@ -163,6 +160,8 @@ void Application::Render()
 	earthMesh.SetVertices(vertices);
 	earthMesh.Draw();
 
+	sphereMesh.Draw();
+
 	spdlog::debug("Position: ({}, {}, {})", earth.position.x, earth.position.y, earth.position.z);
 
 	cubeMesh.Draw();
@@ -171,7 +170,7 @@ void Application::Render()
 	glfwPollEvents();
 }
 
-void Application::processInput(GLFWwindow *window)
+void Application::ProcessInput(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -187,11 +186,25 @@ void Application::processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(CameraMovement::RIGHT, dt);
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void Application::framebuffer_size_callback(GLFWwindow *window, int width, int height)
+void Application::HandleFramebufferResizing(GLFWwindow *window, int width, int height)
 {
-	// make sure the viewport matches the new window dimensions; note that width and
-	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
+}
+
+void Application::HandleCursorMovement(GLFWwindow *window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastMouseX = xpos;
+		lastMouseY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastMouseX;
+	float yoffset = lastMouseY - ypos;
+
+	lastMouseX = xpos;
+	lastMouseY = ypos;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
 }
