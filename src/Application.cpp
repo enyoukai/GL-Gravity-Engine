@@ -114,9 +114,9 @@ void Application::Start()
 	engine.AddBody(sun);
 	engine.AddBody(earth);
 
-	earthMesh.Init();
+	// earthMesh.Init();
 	cubeMesh = MeshFactory::CreateCube(0.1);
-	sphereMesh = MeshFactory::CreateSphere(1, 100, 100);
+	sphereMesh = MeshFactory::CreateSphere(1, 10, 10);
 }
 
 void Application::Update()
@@ -157,8 +157,8 @@ void Application::Render()
 	vertices[7] = earth.position.y / SCALE + 0.01;
 	vertices[8] = 0;
 
-	earthMesh.SetVertices(vertices);
-	earthMesh.Draw();
+	// earthMesh.SetVertices(vertices);
+	// earthMesh.Draw();
 
 	sphereMesh.Draw();
 
@@ -184,6 +184,11 @@ void Application::ProcessInput(GLFWwindow *window)
 		camera.ProcessKeyboard(CameraMovement::LEFT, dt);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(CameraMovement::RIGHT, dt);
+
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Application::HandleFramebufferResizing(GLFWwindow *window, int width, int height)

@@ -27,7 +27,6 @@ void Shader::CompileProgram()
 
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vShaderCStr, NULL);
-	// FIXME GL_CALLBACK triggering here
 	glCompileShader(vertexShader);
 
 	if (!CheckShaderCompilation(vertexShader, "VERTEX"))
