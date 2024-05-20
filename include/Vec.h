@@ -1,14 +1,15 @@
 #pragma once
 
+template <typename T>
 class Vec3
 {
 public:
-	double x;
-	double y;
-	double z;
+	T x;
+	T y;
+	T z;
 
-	double Length();
-	Vec3 Normalize();
+	T Length();
+	Vec3<T> Normalize();
 
 	Vec3 operator+(Vec3 a)
 	{
@@ -48,3 +49,9 @@ public:
 		return *this;
 	}
 };
+
+namespace VecUtils
+{
+	template <typename T>
+	T AppendVecToVector(std::vector<T> &vector, Vec3<T> vec);
+}

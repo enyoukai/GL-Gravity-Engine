@@ -5,6 +5,9 @@
 // #define _USE_MATH_DEFINES
 // #include <cmath>
 
+#include "Math.h"
+#include "Vec.h"
+
 #include <glad/glad.h>
 
 void Mesh::Init()
@@ -47,31 +50,87 @@ namespace MeshFactory
 
 		std::vector<double> sphereVertices;
 
-		for (int lat = 0; lat <= latitudeCount; ++lat)
+		// we treat sphere vertices where x and y lie on the 2d plane and z is the height
+		for (int lat = 0; lat < latitudeCount; lat++)
 		{
-			float theta = lat * M_PI / latitudeCount;
-			float sinTheta = sin(theta);
-			float cosTheta = cos(theta);
-
-			for (int lon = 0; lon <= longitudeCount; ++lon)
+			for (int lon = 0; lon < longitudeCount; lon++)
 			{
-				float phi = lon * 2 * M_PI / longitudeCount;
-				float sinPhi = sin(phi);
-				float cosPhi = cos(phi);
+				// double theta = 2 * M_PI * (lon / longitudeCount);
+				// double phi = M_PI * (lat / (latitudeCount + 1));
 
-				float x = cosPhi * sinTheta;
-				float y = cosTheta;
-				float z = sinPhi * sinTheta;
+				if (lat == 0)
+				{
+					double lowerPhi = M_PI * ((lat + 1) / (latitudeCount + 1));
+					double leftTheta = 2 * M_PI * (lon / longitudeCount);
+					double rightTheta = 2 * M_PI * ((lon + 1) / longitudeCount);
 
-				sphereVertices.push_back(radius * x);
-				sphereVertices.push_back(radius * y);
-				sphereVertices.push_back(radius * z);
+					Vec3 v1 = Math::GetSphereVertex(radius, leftTheta, lowerPhi);
+					Vec3 v2 = Math::GetSphereVertex(radius, rightTheta, lowerPhi);
+
+					sphereVertices.push_back(radius * cos(lowerPhi) * cos(leftTheta));
+					sphereVertices.push_back(radius * cos(lowerPhi) * sin(leftTheta));
+					sphereVertices.push_back(radius * sin(lowerPhi));
+
+					sphereVertices.push_back(radius * cos(lowerPhi) * cos(rightTheta));
+					sphereVertices.push_back(radius * cos(lowerPhi) * sin(rightTheta));
+					sphereVertices.push_back(radius * sin(lowerPhi));
+				}
+
+				else if (lat == latitudeCount - 1)
+				{
+					double upperPhi = M_PI * ((lat - 1) / (latitudeCount + 1));
+					double leftTheta = 2 * M_PI * (lon / longitudeCount);
+					double rightTheta = 2 * M_PI * ((lon + 1) / longitudeCount);
+
+					sphereVertices.push_back(radius * cos(upperPhi) * cos(leftTheta));
+					sphereVertices.push_back(radius * cos(upperPhi) * sin(leftTheta));
+					sphereVertices.push_back(radius * sin(upperPhi));
+
+					sphereVertices.push_back(radius * cos(upperPhi) * cos(rightTheta));
+					sphereVertices.push_back(radius * cos(upperPhi) * sin(rightTheta));
+					sphereVertices.push_back(radius * sin(upperPhi));
+
+					sphereVertices.push_back(0);
+					sphereVertices.push_back(0);
+					sphereVertices.push_back(-radius);
+				}
+				else
+				{
+					double upperPhi = M_PI * (lat / (latitudeCount + 1));
+					double lowerPhi = M_PI * ((lat + 1) / (latitudeCount + 1));
+
+					double leftTheta = 2 * M_PI * (lon / longitudeCount);
+					double rightTheta = 2 * M_PI * ((lon + 1) / longitudeCount);
+
+					sphereVertices.push_back(radius * cos(upperPhi) * cos(leftTheta));
+					sphereVertices.push_back(radius * cos(upperPhi) * sin(leftTheta));
+					sphereVertices.push_back(radius * sin(upperPhi));
+
+					sphereVertices.push_back(radius * cos(lowerPhi) * cos(leftTheta));
+					sphereVertices.push_back(radius * cos(lowerPhi) * sin(leftTheta));
+					sphereVertices.push_back(radius * sin(lowerPhi));
+
+					sphereVertices.push_back(radius * cos(lowerPhi) * cos(rightTheta));
+					sphereVertices.push_back(radius * cos(lowerPhi) * sin(rightTheta));
+					sphereVertices.push_back(radius * sin(lowerPhi));
+
+					sphereVertices.push_back(radius * cos(upperPhi) * cos(rightTheta));
+					sphereVertices.push_back(radius * cos(upperPhi) * sin(rightTheta));
+					sphereVertices.push_back(radius * sin(upperPhi));
+
+					sphereVertices.push_back(radius * cos(lowerPhi) * cos(rightTheta));
+					sphereVertices.push_back(radius * cos(lowerPhi) * sin(rightTheta));
+					sphereVertices.push_back(radius * sin(lowerPhi));
+
+					sphereVertices.push_back(radius * cos(upperPhi) * cos(leftTheta));
+					sphereVertices.push_back(radius * cos(upperPhi) * sin(leftTheta));
+					sphereVertices.push_back(radius * sin(upperPhi));
+				}
 			}
+			sphereMesh.SetVertices(sphereVertices);
+
+			return sphereMesh;
 		}
-
-		sphereMesh.SetVertices(sphereVertices);
-
-		return sphereMesh;
 	}
 
 	Mesh CreateCube(double sideLength)
