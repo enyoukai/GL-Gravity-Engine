@@ -6,7 +6,7 @@
 
 #include "CelestialEngine.h"
 
-enum CameraMovement
+enum class CameraMovement
 {
 	FORWARD,
 	BACKWARD,
@@ -23,6 +23,7 @@ public:
 	glm::mat4 GetProjectionMatrix();
 
 	void ProcessKeyboard(CameraMovement direction, float deltaTime);
+	void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
 
 	glm::vec3 position;
 	glm::vec3 front;

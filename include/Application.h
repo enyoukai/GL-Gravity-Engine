@@ -34,6 +34,12 @@ private:
 	const unsigned int scrWidth = 1920;
 	const unsigned int scrHeight = 1080;
 
+	float lastMouseX = scrWidth / 2.0f;
+	float lastMouseY = scrHeight / 2.0f;
+
+	// state for first time glfwSetCursorPosCallback is called
+	bool firstMouse = true;
+
 	Mesh earthMesh;
 	Mesh cubeMesh;
 

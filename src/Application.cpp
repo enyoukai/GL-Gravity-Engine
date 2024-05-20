@@ -58,6 +58,8 @@ void Application::Load()
 		return;
 	}
 
+	glfwSetWindowUserPointer(window, this);
+
 	glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_DEBUG_OUTPUT);
@@ -75,6 +77,29 @@ void Application::Load()
 		spdlog::error("GL CALLBACK: type = {}, severity = error, message = {}\n", type, message);
 	} },
 						   nullptr);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	// glfw callback can't accept function signature of a class member function so we use a lambda
+	glfwSetCursorPosCallback(window, [](GLFWwindow *window, double xpos, double ypos)
+							 {
+		Application *app;
+
+		if (!(app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window)))) return;
+
+		if (app->firstMouse)
+		{
+			app->lastMouseX = xpos;
+			app->lastMouseY = ypos;
+			app->firstMouse = false;
+		}
+
+		float xoffset = xpos - app->lastMouseX;
+		float yoffset = app->lastMouseY - ypos;
+
+		app->lastMouseX = xpos;
+		app->lastMouseY = ypos;
+
+		app->camera.ProcessMouseMovement(xoffset, yoffset); });
 
 	previousTime = glfwGetTime();
 
@@ -150,14 +175,16 @@ void Application::processInput(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	// Camera Keyboard
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(FORWARD, dt);
+		camera.ProcessKeyboard(CameraMovement::FORWARD, dt);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(BACKWARD, dt);
+		camera.ProcessKeyboard(CameraMovement::BACKWARD, dt);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(LEFT, dt);
+		camera.ProcessKeyboard(CameraMovement::LEFT, dt);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.ProcessKeyboard(RIGHT, dt);
+		camera.ProcessKeyboard(CameraMovement::RIGHT, dt);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

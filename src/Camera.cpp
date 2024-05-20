@@ -20,7 +20,7 @@ Camera::Camera()
 
 glm::mat4 Camera::GetViewMatrix()
 {
-	return glm::lookAt(position, glm::vec3(0, 0, 0), up);
+	return glm::lookAt(position, position + front, up);
 }
 
 glm::mat4 Camera::GetProjectionMatrix()
@@ -31,14 +31,33 @@ glm::mat4 Camera::GetProjectionMatrix()
 void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
 {
 	float velocity = movementSpeed * deltaTime;
-	if (direction == FORWARD)
+	if (direction == CameraMovement::FORWARD)
 		position += front * velocity;
-	if (direction == BACKWARD)
+	if (direction == CameraMovement::BACKWARD)
 		position -= front * velocity;
-	if (direction == LEFT)
+	if (direction == CameraMovement::LEFT)
 		position -= right * velocity;
-	if (direction == RIGHT)
+	if (direction == CameraMovement::RIGHT)
 		position += right * velocity;
+}
+
+void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch)
+{
+	xoffset *= mouseSensitivity;
+	yoffset *= mouseSensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if (constrainPitch)
+	{
+		if (pitch > 89.0f)
+			pitch = 89.0f;
+		if (pitch < -89.0f)
+			pitch = -89.0f;
+	}
+
+	updateCameraVectors();
 }
 
 void Camera::updateCameraVectors()
