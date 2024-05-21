@@ -8,7 +8,7 @@ out vec4 vertexColor;
 
 void main()
 {
-    gl_Position = projection * view * vec4(aPos, 1.0);
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
 
     vertexColor = vec4(aColor, 1.0);
 }

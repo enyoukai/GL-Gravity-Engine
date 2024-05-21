@@ -126,9 +126,16 @@ void Application::Update()
 
 	ProcessInput(window);
 
+	CelestialBody earth = engine.bodies[1];
+	double SCALE = 500000000000.95966;
+
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(earth.position.x / SCALE, earth.position.y / SCALE, 0.0f));
+
 	glm::mat4 viewMatrix = camera.GetViewMatrix();
 	glm::mat4 projectionMatrix = camera.GetProjectionMatrix();
 
+	planetShader.SetMat4("model", modelMatrix);
 	planetShader.SetMat4("view", viewMatrix);
 	planetShader.SetMat4("projection", projectionMatrix);
 
@@ -141,28 +148,10 @@ void Application::Render()
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	CelestialBody earth = engine.bodies[1];
-
-	double SCALE = 500000000000.95966;
-	std::vector<double> vertices(9);
-	vertices[0] = earth.position.x / SCALE;
-	vertices[1] = earth.position.y / SCALE;
-	vertices[2] = 0;
-
-	vertices[3] = earth.position.x / SCALE + 0.01;
-	vertices[4] = earth.position.y / SCALE;
-	vertices[5] = 0;
-
-	vertices[6] = earth.position.x / SCALE;
-	vertices[7] = earth.position.y / SCALE + 0.01;
-	vertices[8] = 0;
-
 	// earthMesh.SetVertices(vertices);
 	// earthMesh.Draw();
 
 	sphereMesh.Draw();
-
-	spdlog::debug("Position: ({}, {}, {})", earth.position.x, earth.position.y, earth.position.z);
 
 	cubeMesh.Draw();
 

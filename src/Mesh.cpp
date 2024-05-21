@@ -23,7 +23,7 @@ void Mesh::SetVertices(std::vector<double> &vertices)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	// TODO: Don't hardcode the format for bufferData and vertexAttribPointer
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(double), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(double), vertices.data(), GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void *)0);
 
