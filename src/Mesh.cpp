@@ -52,7 +52,7 @@ namespace MeshFactory
 
 		// we treat sphere vertices where x and y lie on the 2d plane and z is the height
 		// lat 0 is the top pole, lat latitudeCount is one before the bottom pole
-		for (int lat = 0; lat <= latitudeCount / 2; lat++)
+		for (int lat = 0; lat < latitudeCount; lat++)
 		{
 			for (int lon = 0; lon < longitudeCount; lon++)
 			{
@@ -74,7 +74,7 @@ namespace MeshFactory
 					VecUtils::AppendVecToVector(sphereVertices, v2);
 				}
 
-				else if (lat == latitudeCount)
+				else if (lat == latitudeCount - 1)
 				{
 					double upperPhi = (M_PI / 2) - M_PI * ((doubleLat) / (latitudeCount + 1));
 					double leftTheta = 2 * M_PI * (doubleLon / longitudeCount);

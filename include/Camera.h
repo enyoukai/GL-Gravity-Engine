@@ -17,13 +17,16 @@ enum class CameraMovement
 class Camera
 {
 public:
-	Camera();
+	Camera(unsigned int scrWidth, unsigned int scrHeight);
 
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();
 
 	void ProcessKeyboard(CameraMovement direction, float deltaTime);
 	void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
+
+	// we store as float to avoid cost of casting per render 
+	float scrWidth, scrHeight;
 
 	glm::vec3 position;
 	glm::vec3 front;

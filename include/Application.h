@@ -45,7 +45,8 @@ private:
 	Mesh cubeMesh;
 	Mesh sphereMesh;
 
-	Camera camera;
+	// not ideal but will do for now
+	Camera camera = Camera(1920, 1080);
 
 	Shader planetShader;
 };

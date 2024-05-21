@@ -116,7 +116,7 @@ void Application::Start()
 
 	// earthMesh.Init();
 	cubeMesh = MeshFactory::CreateCube(0.1);
-	sphereMesh = MeshFactory::CreateSphere(1, 10, 10);
+	sphereMesh = MeshFactory::CreateSphere(1, 50, 50);
 }
 
 void Application::Update()

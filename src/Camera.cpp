@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera()
+Camera::Camera(unsigned int scrWidth, unsigned int scrHeight)
 {
 	position = glm::vec3(0.0f, 0.0f, 3.0f);
 	front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -15,6 +15,9 @@ Camera::Camera()
 	mouseSensitivity = 0.1f;
 	zoom = 45.0f;
 
+	this->scrWidth = scrWidth;
+	this->scrHeight = scrHeight;
+
 	updateCameraVectors();
 }
 
@@ -25,7 +28,7 @@ glm::mat4 Camera::GetViewMatrix()
 
 glm::mat4 Camera::GetProjectionMatrix()
 {
-	return glm::perspective(glm::radians(zoom), 800.0f / 600.0f, 0.1f, 100.0f);
+	return glm::perspective(glm::radians(zoom), scrWidth / scrHeight, 0.1f, 100.0f);
 }
 
 void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
